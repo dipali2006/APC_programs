@@ -174,18 +174,71 @@ while count < n:
     a = b
     b = c
     count += 1
-#print number is prime or not
-#print sum of digits entered by user
-n=int(input("enter the number you want"))
-sum=0
-i=1
-while n<=i:
-    
+print("\n")
 
+#print number is prime or not
+num = int(input("Enter a number: "))
+if num <= 1:
+    print("Not Prime")
+else:
+    i = 2
+    while i < num:
+        if num % i == 0:
+            print("Not Prime")
+            break
+        i += 1
+    else:
+        print("Prime")
+print("\n")   
+
+#print sum of digits entered by user
+n=int(input("enter the nuber"))
+sum=0
+while num>0:
+    num=n%10
+    sum+=n
+    n//=10
+print(sum)
+print("\n")
 
 #check number is palindrome or not
+n=int(input("enter the nuber"))
+
+n=original
+rev=0
+while num>0:
+    num=n%10
+    rev=rev*10+n
+    n//=10
+if rev==original:
+    print("palindrome")
+else:
+    print("not palindrome")
+print("\n")
+
 #print multipication table
+n=int(int("enter the nuber"))
+i=1
+while n>=i:
+    print(i*n,end="")
+print("\n")
+
 #print largest and smallest number from n numbers
+n = int(input("Enter how many numbers: "))
+num = int(input("Enter number: "))
+largest = smallest = num
+i = 2
+while i <= n:
+    num = int(input("Enter number: "))
+    if num > largest:
+        largest = num
+    if num < smallest:
+        smallest = num
+    i += 1
+
+print("Largest =", largest)
+print("Smallest =", smallest)
+
 
 
 
