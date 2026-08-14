@@ -1,4 +1,4 @@
-"""#Write a Python program to create a tuple of five integers and display it.
+#Write a Python program to create a tuple of five integers and display it.
 t1=(10,20,30,40,50)
 print(t1)
 
@@ -159,17 +159,17 @@ else:
 #marks 
 students=((101,"dipali","CSE",91),(102,"sayali","CSE",54))
 print(students)
-
+"""
 Display all the details.
 Create tuples containing:
 Employee ID 
 Name 
 Salary """
-"""employee=((101,"dipali",20000)(102,"sayali",342356))
+employee=((101,"dipali",20000)(102,"sayali",342356))
 print(employee)"""
 
 
-"""Store item prices in a tuple and calculate:
+Store item prices in a tuple and calculate:
 Total bill 
 Average price 
 Highest-priced item 
@@ -229,6 +229,36 @@ l1=list(t1)
 sorted(l1)
 t2=tuple(l1)
 print(t2)
+
+patients = (
+    (101, "Rahul", 25, "A+"),
+    (102, "Priya", 30, "B+"),
+    (103, "Amit", 22, "O+"),
+    (104, "Sneha", 28, "A+"),
+    (105, "Rohan", 35, "O+")
+)
+
+#Display all records
+print("All Patient Records:")
+for patient in patients:
+    print(patiece)
+search_id = 103
+
+print("\nPatient with ID", search_id, ":")
+for patient in patients:
+    if patient[0] == search_id:
+        print(patient)
+
+total = 0
+for patient in patients:
+    total += 1
+
+print("\nTotal number of patients:", total)
+blood_group = "A+"
+print("\nPatients with blood group", blood_group, ":")
+for patient in patients:
+    if patient[3] == blood_group:
+        print(patient)
 
 
 
