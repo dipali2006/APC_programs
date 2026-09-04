@@ -47,3 +47,90 @@ print("Float:", k)
 # Double
 l = array('d', [1.23456789, 9.87654321])
 print("Double:", l)
+
+
+# Create an integer array
+arr = array('i', [10, 20, 30, 40, 20])
+
+print("Original Array:", arr)
+
+# append()
+arr.append(50)
+print("After append():", arr)
+
+# buffer_info()
+print("buffer_info():", arr.buffer_info())
+
+# byteswap()
+arr.byteswap()
+print("After byteswap():", arr)
+
+# Swap back to original
+arr.byteswap()
+
+# count()
+print("count(20):", arr.count(20))
+
+# extend()
+arr.extend([60, 70])
+print("After extend():", arr)
+
+# frombytes()
+a = array('i')
+a.frombytes(array('i', [1, 2, 3]).tobytes())
+print("frombytes():", a)
+
+# fromfile()
+f = open("arraydata.bin", "wb")
+arr.tofile(f)
+f.close()
+
+b = array('i')
+f = open("arraydata.bin", "rb")
+b.fromfile(f, len(arr))
+f.close()
+print("fromfile():", b)
+
+# fromlist()
+c = array('i')
+c.fromlist([100, 200, 300])
+print("fromlist():", c)
+
+# fromunicode() (Unicode array)
+u = array('u')
+u.fromunicode("Hello")
+print("fromunicode():", u)
+
+# index()
+print("index(30):", arr.index(30))
+
+# insert()
+arr.insert(2, 25)
+print("After insert():", arr)
+
+# pop()
+print("pop():", arr.pop())
+print("After pop():", arr)
+
+# remove()
+arr.remove(20)
+print("After remove(20):", arr)
+
+# reverse()
+arr.reverse()
+print("After reverse():", arr)
+
+# tobytes()
+print("tobytes():", arr.tobytes())
+
+# tofile()
+f = open("output.bin", "wb")
+arr.tofile(f)
+f.close()
+print("tofile(): Data written to output.bin")
+
+# tolist()
+print("tolist():", arr.tolist())
+
+# tounicode()
+print("tounicode():", u.tounicode())
