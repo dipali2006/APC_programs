@@ -1,0 +1,643 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ event.title }} - EventHub</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: white;
+            color: #1f2937;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            width: 100%;
+            padding: 24px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #777;
+            font-size: 16px;
+        }
+
+        .nav-links a:hover {
+            color: #222;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* MAIN */
+        .container {
+            width: 87%;
+            max-width: 1100px;
+            margin: 45px auto;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: #777;
+            font-size: 15px;
+        }
+
+        h1 {
+            font-size: 34px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            overflow-wrap: anywhere;
+        }
+
+        h2 {
+            margin-top: 30px;
+        }
+
+        /* EVENT DETAILS */
+        .event-details {
+            background: #fafafa;
+            border: 1px solid #eeeeee;
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 30px;
+        }
+
+        .detail-line {
+            margin: 12px 0;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        /* PROGRESS */
+        .progress {
+            font-size: 19px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        /* ADD TASK FORM */
+        .add-task-card {
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 24px;
+            margin: 25px 0;
+        }
+
+        .add-task-card h2 {
+            margin-top: 0;
+        }
+
+        .task-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 14px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .add-task-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+        .add-task-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* TASK TABLE */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .task-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #d6dce5;
+        }
+
+        .task-table th,
+        .task-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #d6dce5;
+        }
+
+        .task-table th {
+            background: #fafafa;
+            font-weight: 600;
+        }
+
+        .task-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* CHECKBOX */
+        .task-checkbox {
+            width: 19px;
+            height: 19px;
+            cursor: pointer;
+        }
+
+        .done-task {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .dashboard-btn,
+        .delete-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 7px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .dashboard-btn {
+            background: #1f2937;
+        }
+
+        .dashboard-btn:hover {
+            background: #374151;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+        }
+
+        .delete-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* EVENT COMPLETED */
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .success-message h2 {
+            margin-top: 0;
+        }
+
+        /* EMPTY CHECKLIST */
+        .empty-message {
+            padding: 20px;
+            text-align: center;
+            color: #777;
+            background: #fafafa;
+        }
+
+        /* MOBILE */
+        @media (max-width: 850px) {
+            .task-form {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .task-form {
+                grid-template-columns: 1fr;
+            }
+
+            .task-table {
+                font-size: 13px;
+            }
+
+            .task-table th,
+            .task-table td {
+                padding: 9px 6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <div class="navbar">
+
+        <div class="logo">
+            EventHub
+        </div>
+
+        <div class="nav-links">
+
+            <a href="{% url 'dashboard' %}">
+                Dashboard
+            </a>
+
+            <a href="{% url 'event_create' %}">
+                Upload Event
+            </a>
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+
+                <button type="submit" class="logout-btn">
+                    Logout
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+
+        <a href="{% url 'dashboard' %}" class="back-link">
+            &larr; Back to Dashboard
+        </a>
+
+        <h1>{{ event.title }}</h1>
+
+
+        <!-- EVENT DETAILS -->
+        <h2>Event Details</h2>
+
+        <div class="event-details">
+
+            <p class="detail-line">
+                <span class="detail-label">Event Name:</span>
+                {{ event.title }}
+            </p>
+
+            <p class="detail-line">
+                <span class="detail-label">Date:</span>
+
+                {% if event.date %}
+                    {{ event.date|date:"j F Y" }}
+                {% else %}
+                    Not provided
+                {% endif %}
+            </p>
+
+            <p class="detail-line">
+                <span class="detail-label">Time:</span>
+
+                {% if event.time %}
+                    {{ event.time|time:"g:i A" }}
+                {% else %}
+                    Not provided
+                {% endif %}
+            </p>
+
+            <p class="detail-line">
+                <span class="detail-label">Venue:</span>
+                {{ event.venue|default:"Not provided" }}
+            </p>
+
+            <p class="detail-line">
+                <span class="detail-label">Event Type:</span>
+                {{ event.event_type|default:"Not provided" }}
+            </p>
+
+            <p class="detail-line">
+                <span class="detail-label">Description:</span>
+                {{ event.description|default:"Not provided" }}
+            </p>
+
+        </div>
+
+
+        <!-- CHECKLIST PROGRESS -->
+        <h2>Checklist Progress</h2>
+
+        <div class="progress">
+            {{ done_count }} of {{ total_count }} done
+        </div>
+
+
+        {% if event_completed %}
+
+            <div class="success-message">
+
+                <h2>
+                    🎉 Event Completed Successfully!
+                </h2>
+
+                <p>
+                    Congratulations! All preparations for
+                    {{ event.title }} have been completed successfully.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- ADD CUSTOM TASK -->
+        <div class="add-task-card">
+
+            <h2>
+                Add Your Own Checklist Task
+            </h2>
+
+            <p>
+                Add a new preparation task and assign it to a person.
+            </p>
+
+            <form
+                method="post"
+                action="{% url 'add_task' event.pk %}"
+                class="task-form">
+
+                {% csrf_token %}
+
+                <!-- TASK TITLE -->
+                <div class="form-group">
+
+                    <label for="task-title">
+                        Task Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="task-title"
+                        name="title"
+                        placeholder="Example: Arrange wedding decorations"
+                        maxlength="200"
+                        required>
+
+                </div>
+
+
+                <!-- DEADLINE -->
+                <div class="form-group">
+
+                    <label for="task-deadline">
+                        Due Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="task-deadline"
+                        name="deadline"
+                        min="{{ today|date:'Y-m-d' }}">
+
+                </div>
+
+
+                <!-- ASSIGN PERSON -->
+                <div class="form-group">
+
+                    <label for="assigned-to">
+                        Assign To
+                    </label>
+
+                    <input
+                        type="text"
+                        id="assigned-to"
+                        name="assigned_to"
+                        placeholder="Enter person's name"
+                        maxlength="100">
+
+                </div>
+
+
+                <!-- ADD BUTTON -->
+                <button
+                    type="submit"
+                    class="add-task-btn">
+
+                    + Add Task
+
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- EVENT CHECKLIST -->
+        <h2>Event Checklist</h2>
+
+        <div class="table-wrapper">
+
+            <table class="task-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Done</th>
+                        <th>Task</th>
+                        <th>Due</th>
+                        <th>Assigned To</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for task in tasks %}
+
+                        <tr>
+
+                            <!-- COMPLETE TASK -->
+                            <td>
+
+                                <form
+                                    method="post"
+                                    action="{% url 'toggle_task' task.pk %}">
+
+                                    {% csrf_token %}
+
+                                    <input
+                                        type="checkbox"
+                                        name="done"
+                                        class="task-checkbox"
+                                        {% if task.done %}checked{% endif %}
+                                        onchange="this.form.submit()">
+
+                                </form>
+
+                            </td>
+
+
+                            <!-- TASK NAME -->
+                            <td class="{% if task.done %}done-task{% endif %}">
+                                {{ task.title }}
+                            </td>
+
+
+                            <!-- DEADLINE -->
+                            <td>
+
+                                {% if task.deadline %}
+                                    {{ task.deadline|date:"j M Y" }}
+                                {% else %}
+                                    -
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- ASSIGNED PERSON -->
+                            <td>
+
+                                {% if task.assigned_to %}
+                                    {{ task.assigned_to }}
+                                {% else %}
+                                    Not assigned
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td colspan="4" class="empty-message">
+
+                                No checklist tasks available.
+                                Add your own task above.
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-buttons">
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="dashboard-btn">
+
+                &larr; Back to Dashboard
+
+            </a>
+
+
+            <form
+                method="post"
+                action="{% url 'delete_event' event.pk %}"
+                onsubmit="return confirm('Are you sure you want to delete this event and all its checklist tasks? This action cannot be undone.');">
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="delete-btn">
+
+                    Delete Event
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

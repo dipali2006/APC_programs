@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Event | EventHub</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f6fc;
+            color: #243047;
+        }
+
+        nav {
+            background: #172554;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            margin: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 18px;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: 35px auto;
+            padding: 0 18px;
+        }
+
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 5px 22px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #172554;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+            font-family: Arial, sans-serif;
+        }
+
+        input[type="file"] {
+            background: #f8fafc;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .helptext {
+            display: block;
+            margin-top: 6px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .error {
+            color: #b91c1c;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        .upload-box {
+            padding: 18px;
+            background: #eff6ff;
+            border: 1px dashed #60a5fa;
+            border-radius: 9px;
+            margin-bottom: 20px;
+        }
+
+        .description-help {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 7px;
+        }
+
+        button {
+            width: 100%;
+            background: #2563eb;
+            color: white;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 18px;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            .form-card {
+                padding: 20px;
+            }
+
+            nav {
+                padding: 18px 5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <nav>
+
+        <h2>EventHub</h2>
+
+        <div>
+            <a href="{% url 'dashboard' %}">
+                Dashboard
+            </a>
+
+            <a href="{% url 'logout' %}">
+                Logout
+            </a>
+        </div>
+
+    </nav>
+
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+
+        <div class="form-card">
+
+            <h1>Create a New Event</h1>
+
+            <p class="subtitle">
+                Enter event details manually or upload an event poster.
+            </p>
+
+
+            <!-- EVENT FORM -->
+            <form
+                method="POST"
+                enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+
+                <!-- FORM ERRORS -->
+                {% if form.non_field_errors %}
+
+                    <div class="error">
+                        {{ form.non_field_errors }}
+                    </div>
+
+                {% endif %}
+
+
+                <!-- FORM FIELDS -->
+                {% for field in form %}
+
+                    <div class="form-group">
+
+                        <label for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+
+
+                        {% if field.name == "upload" %}
+
+                            <div class="upload-box">
+
+                                {{ field }}
+
+                                <span class="helptext">
+                                    {{ field.help_text }}
+                                </span>
+
+                            </div>
+
+
+                        {% elif field.name == "description" %}
+
+                            {{ field }}
+
+                            <p class="description-help">
+                                A default description is provided based
+                                on your event type. You can edit it.
+                            </p>
+
+
+                        {% else %}
+
+                            {{ field }}
+
+                        {% endif %}
+
+
+                        <!-- FIELD ERRORS -->
+                        {% for error in field.errors %}
+
+                            <p class="error">
+                                {{ error }}
+                            </p>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endfor %}
+
+
+                <!-- SUBMIT -->
+                <button type="submit">
+                    Create Event
+                </button>
+
+            </form>
+
+
+            <!-- BACK LINK -->
+            <a
+                class="back-link"
+                href="{% url 'dashboard' %}">
+
+                ← Back to Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- DEFAULT DESCRIPTION SCRIPT -->
+    <script>
+
+        const titleInput = document.getElementById("id_title");
+
+        const eventTypeInput = document.getElementById("id_event_type");
+
+        const descriptionInput = document.getElementById("id_description");
+
+
+        const defaultDescriptions = {
+
+            wedding:
+                "A beautiful celebration of love and togetherness, " +
+                "bringing family and friends together. Join us to " +
+                "celebrate this special day and create wonderful memories.",
+
+            birthday:
+                "A joyful celebration filled with laughter, happiness, " +
+                "and special moments. Join us to make this birthday " +
+                "memorable with family and friends.",
+
+            engagement:
+                "A beautiful celebration marking the beginning of a " +
+                "new journey together. Join us as we celebrate love, " +
+                "commitment, and happiness.",
+
+            anniversary:
+                "A celebration of love, commitment, and cherished " +
+                "memories. Join us to honor this special milestone " +
+                "and create more beautiful moments.",
+
+            workshop:
+                "An engaging learning experience focused on sharing " +
+                "knowledge, developing skills, and exploring new ideas. " +
+                "Join us for an informative and interactive session.",
+
+            seminar:
+                "An informative gathering designed to share knowledge, " +
+                "ideas, and expert insights. Join us for an engaging " +
+                "and meaningful learning experience.",
+
+            conference:
+                "A gathering of professionals and participants to " +
+                "exchange ideas, discuss important topics, and explore " +
+                "new opportunities for collaboration.",
+
+            farewell:
+                "A heartfelt gathering to celebrate memories, friendship, " +
+                "and new beginnings. Join us as we express gratitude " +
+                "and wish everyone success in their next journey.",
+
+            reunion:
+                "A special gathering to reconnect with friends and " +
+                "family, share memories, and celebrate the bonds " +
+                "that bring us together.",
+
+            graduation:
+                "A celebration of achievements, dedication, and new " +
+                "beginnings. Join us to honor this important milestone " +
+                "and look forward to future opportunities."
+        };
+
+
+        let lastAutoDescription = "";
+
+
+        function getDefaultDescription() {
+
+            const eventTitle = titleInput.value.toLowerCase();
+
+            const eventType = eventTypeInput.value.toLowerCase();
+
+            const combinedText = eventTitle + " " + eventType;
+
+
+            if (
+                combinedText.includes("wedding") ||
+                combinedText.includes("marriage")
+            ) {
+                return defaultDescriptions.wedding;
+            }
+
+            if (combinedText.includes("birthday")) {
+                return defaultDescriptions.birthday;
+            }
+
+            if (combinedText.includes("engagement")) {
+                return defaultDescriptions.engagement;
+            }
+
+            if (combinedText.includes("anniversary")) {
+                return defaultDescriptions.anniversary;
+            }
+
+            if (combinedText.includes("workshop")) {
+                return defaultDescriptions.workshop;
+            }
+
+            if (combinedText.includes("seminar")) {
+                return defaultDescriptions.seminar;
+            }
+
+            if (combinedText.includes("conference")) {
+                return defaultDescriptions.conference;
+            }
+
+            if (combinedText.includes("farewell")) {
+                return defaultDescriptions.farewell;
+            }
+
+            if (combinedText.includes("reunion")) {
+                return defaultDescriptions.reunion;
+            }
+
+            if (combinedText.includes("graduation")) {
+                return defaultDescriptions.graduation;
+            }
+
+            return "";
+        }
+
+
+        function updateDescription() {
+
+            const newDefault = getDefaultDescription();
+
+            const currentDescription =
+                descriptionInput.value.trim();
+
+
+            // Do not overwrite a description written by the user.
+            if (
+                currentDescription === "" ||
+                currentDescription === lastAutoDescription
+            ) {
+
+                if (newDefault) {
+
+                    descriptionInput.value = newDefault;
+
+                    lastAutoDescription = newDefault;
+
+                } else {
+
+                    descriptionInput.value = "";
+
+                    lastAutoDescription = "";
+                }
+            }
+        }
+
+
+        titleInput.addEventListener(
+            "input",
+            updateDescription
+        );
+
+
+        eventTypeInput.addEventListener(
+            "input",
+            updateDescription
+        );
+
+
+        // Provide a default description when the page opens.
+        updateDescription();
+
+    </script>
+
+</body>
+
+</html>
